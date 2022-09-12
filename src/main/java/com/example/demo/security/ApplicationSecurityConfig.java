@@ -1,6 +1,6 @@
 package com.example.demo.security;
 
-import com.example.demo.auth.ApplicationUserService;
+import com.example.demo.auth.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,13 +24,13 @@ import static com.example.demo.security.ApplicationUserRole.*;
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
-    private final ApplicationUserService applicationUserService;
+    private final AppUserService appUserService;
 
     @Autowired
     public ApplicationSecurityConfig(PasswordEncoder passwordEncoder,
-                                     ApplicationUserService applicationUserService) {
+                                     AppUserService appUserService) {
         this.passwordEncoder = passwordEncoder;
-        this.applicationUserService = applicationUserService;
+        this.appUserService = appUserService;
     }
 
     @Override
@@ -73,7 +73,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder);
-        provider.setUserDetailsService(applicationUserService);
+        provider.setUserDetailsService(appUserService);
         return provider;
     }
 
