@@ -11,26 +11,26 @@ import java.util.Optional;
 import static com.example.demo.security.ApplicationUserRole.*;
 
 @Repository("fake")
-public class FakeApplicationUserDaoService implements ApplicationUserDao {
+public class FakeAppUserDaoService implements ApplicationUserDao {
 
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public FakeApplicationUserDaoService(PasswordEncoder passwordEncoder) {
+    public FakeAppUserDaoService(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public Optional<ApplicationUser> selectApplicationUserByUsername(String username) {
+    public Optional<AppUser> selectApplicationUserByUsername(String username) {
         return getApplicationUsers()
                 .stream()
-                .filter(applicationUser -> username.equals(applicationUser.getUsername()))
+                .filter(appUser -> username.equals(appUser.getUsername()))
                 .findFirst();
     }
 
-    private List<ApplicationUser> getApplicationUsers() {
-        List<ApplicationUser> applicationUsers = Lists.newArrayList(
-                new ApplicationUser(
+    private List<AppUser> getApplicationUsers() {
+        return Lists.newArrayList(
+                new AppUser(
                         "annasmith",
                         passwordEncoder.encode("password"),
                         STUDENT.getGrantedAuthorities(),
@@ -39,7 +39,7 @@ public class FakeApplicationUserDaoService implements ApplicationUserDao {
                         true,
                         true
                 ),
-                new ApplicationUser(
+                new AppUser(
                         "linda",
                         passwordEncoder.encode("password"),
                         ADMIN.getGrantedAuthorities(),
@@ -48,7 +48,7 @@ public class FakeApplicationUserDaoService implements ApplicationUserDao {
                         true,
                         true
                 ),
-                new ApplicationUser(
+                new AppUser(
                         "tom",
                         passwordEncoder.encode("password"),
                         ADMINTRAINEE.getGrantedAuthorities(),
@@ -58,8 +58,6 @@ public class FakeApplicationUserDaoService implements ApplicationUserDao {
                         true
                 )
         );
-
-        return applicationUsers;
     }
 
 }
