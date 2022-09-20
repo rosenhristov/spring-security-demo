@@ -13,18 +13,18 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.crypto.SecretKey;
 
-import static com.example.demo.security.ApplicationUserRole.*;
+import static com.example.demo.security.AppUserRole.*;
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
     private final AppUserService appUserService;
@@ -32,10 +32,10 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtConfig jwtConfig;
 
     @Autowired
-    public ApplicationSecurityConfig(PasswordEncoder passwordEncoder,
-                                     AppUserService appUserService,
-                                     SecretKey secretKey,
-                                     JwtConfig jwtConfig) {
+    public SecurityConfig(PasswordEncoder passwordEncoder,
+                          AppUserService appUserService,
+                          SecretKey secretKey,
+                          JwtConfig jwtConfig) {
         this.passwordEncoder = passwordEncoder;
         this.appUserService = appUserService;
         this.secretKey = secretKey;
@@ -47,7 +47,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .sessionCreationPolicy(STATELESS)
                 .and()
                 .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
                 .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig),JwtUsernameAndPasswordAuthenticationFilter.class)
@@ -70,5 +70,4 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         provider.setUserDetailsService(appUserService);
         return provider;
     }
-
 }
